@@ -19,6 +19,8 @@ class Author(models.Model):
 #Класс Категории
 class Category(models.Model):
     name=models.CharField(max_length=64, unique=True)
+    def __str__(self):
+        return self.name.title()
 
 #Класс Пост
 class Post(models.Model):
@@ -47,6 +49,9 @@ class Post(models.Model):
 
     def preview(self):
         return f'{self.text[0:123]}...'
+    
+    def __str__(self):
+        return f'{self.title.title()}: {self.text[:20]}'
 
 #Класс Категории постов
 class PostCategory(models.Model):
@@ -68,3 +73,4 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+        

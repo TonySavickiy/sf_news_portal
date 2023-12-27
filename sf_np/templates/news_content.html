@@ -1,0 +1,14 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+{% block title %}
+{{ news.title.title }}
+{% endblock title %}
+
+{% block content %}
+<h1>{{ news.title }}</h1>
+<p>
+    Текст статьи: {{ news.text }}
+</p>
+<p>Дата публикации: {{ news.dateCreation| date:'d-m-Y' }}</p>
+{% endblock content %}
