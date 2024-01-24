@@ -50,7 +50,7 @@ class SearchList(ListView):
         return context
 
 
-class PostAdd(PermissionRequiredMixin, CreateView):
+class PostNewsAdd(PermissionRequiredMixin, CreateView):
     raise_exception = True
     model = Post
     template_name = 'news_add.html'
@@ -65,7 +65,28 @@ class PostAdd(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.Author = self.request.user
-        form.save()
+        post = form.save(commit=False)
+        post.categoryType = 'NW'
+        return super().form_valid(form)
+    
+    
+class PostArticleAdd(PermissionRequiredMixin, CreateView):
+    raise_exception = True
+    model = Post
+    template_name = 'news_add.html'
+    context_object_name = 'Create'
+    form_class = PostForm
+    permission_required = ('news.add_post',)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление статьи на сайт'
+        return context
+
+    def form_valid(self, form):
+        form.instance.Author = self.request.user
+        post = form.save(commit=False)
+        post.categoryType = 'AR'
         return super().form_valid(form)
 
 
@@ -104,7 +125,7 @@ class CategoryList(NewsList):
     model = Post
     template_name = 'category_list.html'
     context_object_name = 'category_news_list'
-
+    
     def get_queryset(self, ):
         self.postCategory = get_object_or_404(Category, id=self.kwargs['pk'])
         queryset = Post.objects.filter(postCategory=self.postCategory).order_by('-dateCreation')

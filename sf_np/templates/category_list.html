@@ -40,6 +40,7 @@
                <td><a href="{% url 'post_detail' cat.id %}">{{cat.title|censor}}</a></td>
                <td>{{ cat.dateCreation|date:'d.m.Y'}}</td>
                <td>{{ cat.text|truncatewords:20|censor }}</td>
+               
                <td>
                     {% for category in cat.postCategory.all %}
                     <a href="{% url 'category_list' category.id %}">{{category}}</a>
@@ -49,10 +50,18 @@
                <td>
 
                     {% if perms.news.change_post %}
+                    {% if cat.categoryType == 'NW' %}
                     <a href="{% url 'post_update' pk=cat.id %}">Изменить</a>
+                    {% else %}
+                    <a href="{% url 'post_article_update' pk=cat.id %}">Изменить</a>
+                    {% endif %}
                     {% endif %}
                     {% if perms.news.delete_post %}
+                    {% if cat.categoryType == 'NW' %}
                     <a href="{% url 'post_delete' pk=cat.id %}">Удалить</a>
+                    {% else %}
+                    <a href="{% url 'post_article_delete' pk=cat.id %}">Удалить</a>
+                    {% endif %}
                     {% endif %}
                </td>
            </tr>
